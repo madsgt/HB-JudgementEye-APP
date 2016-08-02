@@ -40,6 +40,12 @@ class Movie(db.Model):
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String(200), nullable=True)
 
+
+    def __repr__(self):
+        """Provide representation when printed"""
+        s = "<Movie movie_id=%s title=%s released_at=%s imdb_url=%s>"
+        return s % (self.movie_id, self.title, self.released_at, self.imdb_url)
+
 class Rating(db.Model):
     """ Ratings given by users for movie titles"""
 
@@ -50,6 +56,10 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=True)
 
+    def __repr__(self):
+        """Provide representation when printed"""
+        s = "<Rating rating_id=%s movie_id=%s user_id=%s score=%s>"
+        return s % (self.rating_id, self.movie_id, self.user_id, self.score)
 
 ##############################################################################
 # Helper functions
