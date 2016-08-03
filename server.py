@@ -35,17 +35,33 @@ def register_form():
 @app.route('/register', methods=['POST'])
 def register_process():
     """Accept form data"""
-    user_name = request.form.get("username")
+    email = request.form.get("email")
     password = request.form.get("password")
+    age = request.form.get("age")
+    zipcode = request.form.get("zipcode")
 
+       
+
+    user_exists = User.query.filter_by(email=email).all()
+
+    if user in user_exists:
+        user_exists != []
+        flash("User %s already exists!!" %email)
+    else:
+        user = User(email=email, password=password, age=age, zipcode=zipcode)
+        db.session.add(user)
+        flash("User %s added!!" % email)
+
+    db.session.commit()
 
     
-    
-    return redirect("register_form.html")
+
+      
+    return redirect("/")
 
 @app.route("/users")
 def user_list():
-    """Show list of users"""
+    """Show list of users"""    
 
     users = User.query.all()
     return render_template("user_list.html", users=users)
@@ -54,7 +70,7 @@ def user_list():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 
