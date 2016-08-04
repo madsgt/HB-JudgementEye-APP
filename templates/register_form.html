@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form action="/register" method="POST">
+
+        <h2 class="form-signin-heading">Please Register</h2>
+
+        EMAIL : <input type="email" name="email">
+        <br>
+        <br>
+        PASSWORD : <input type="password" name="password">
+        <br>
+        <br>
+        AGE : <input type="number" name="age">
+         <br>
+        <br>
+        ZIPCODE : <input type="text" name="zipcode">
+        <br>
+        <br>
+        <input type="submit" value="REGISTER">
+
+
+
+
+
+{% endblock %}

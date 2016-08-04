@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<h2>Movie Details</h2>
+<h3>{{ movie.title }}, {{ movie.movie_id }})</h3>
+<br>
+
+
+ <a href="/movies/{{ movie.movie_id }}">
+        <li>Release Date: {{ movie.released_at }}</li>
+        <br>
+        <li>IMDB Link: {{ movie.imdb_url }}</li>
+        <br>
+    </a>
+
+     {% if movie.ratings %}
+
+    <h4>Movie Rating</h4>
+
+     {% for ratings in movie.ratings %}
+
+
+      <li><a href="/users/{{ratings.user_id}}">The movie was scored {{ratings.score}} by the user {{ratings.user_id}} 
+        </a> 
+      </li>
+
+
+       
+
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
+      
