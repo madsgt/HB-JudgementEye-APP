@@ -112,8 +112,19 @@ def user_details(user_id):
 @app.route("/movies")
 def list_movies():
     """Show list of movies"""
-    movies = Movie.query.all()
+    movies = Movie.query.order_by('title').all()
     return render_template("movies_list.html", movies=movies)
+
+@app.route("/movies/<int:movie_id>")
+def movie_details(movie_id):
+    """Show details of a movie"""
+    movie = Movie.query.get(movie_id)
+    return render_template("movie_details.html", movie=movie)
+
+
+
+
+
 
 
 if __name__ == "__main__":
