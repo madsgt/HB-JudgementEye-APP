@@ -119,7 +119,21 @@ def list_movies():
 def movie_details(movie_id):
     """Show details of a movie"""
     movie = Movie.query.get(movie_id)
+
+    user_id = session['user_id']
+
+    if user_id:
+        score = Rating.query.filter_by()
+
+
+
+
+
+
+
     return render_template("movie_details.html", movie=movie)
+
+
 
 
 
