@@ -1,6 +1,8 @@
 """Movie Ratings."""
 
+import jinja
 from jinja2 import StrictUndefined
+
 
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
@@ -42,22 +44,57 @@ def register_process():
 
        
 
-    user_exists = User.query.filter_by(email=email).all()
-
-    if user in user_exists:
-        user_exists != []
+    user_exists = User.query.filter_by(email=email).first()
+    user = User(email=email, password=password, age=age, zipcode=zipcode)
+    
+    if user.email in user_exists.email:
+        
         flash("User %s already exists!!" %email)
     else:
-        user = User(email=email, password=password, age=age, zipcode=zipcode)
         db.session.add(user)
         flash("User %s added!!" % email)
 
     db.session.commit()
 
-    
+    # need to figure out a way to stop duplication of registration
 
       
+    return redirect("/login")
+
+@app.route('/login', methods=['GET'])
+def login_form():
+    """Show login form"""
+    return render_template("login_form.html")
+
+@app.route('/login', methods=['POST'])
+def process_login():
+    """Process log in form"""
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        flash("Not a valid user")
+        return redirect("/login")
+
+    if user.password != password:
+        flash("Not a valid password")
+        return redirect("/login")
+
+    session["logged_in"] = user.email
+    flash("already logged in")
     return redirect("/")
+
+
+@app.route('/logout')
+def logout():
+    "User logs out"
+
+    del session["logged_in"]
+    flash("User logged out!")
+    return redirect("/")
+
 
 @app.route("/users")
 def user_list():
@@ -66,11 +103,23 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+@app.route("/users/<int:user_id>")
+def user_details(user_id):
+
+    user = User.query.get(user_id)
+    return render_template("user.html", user=user)
+
+@app.route("/movies")
+def list_movies():
+    """Show list of movies"""
+    movies = Movie.query.all()
+    return render_template("movies_list.html", movies=movies)
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = False
+    app.debug = True
 
     connect_to_db(app)
 
