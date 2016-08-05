@@ -78,11 +78,11 @@ def process_login():
         flash("Not a valid user")
         return redirect("/login")
 
-    if user.password != password:
+    elif user and user.password != password:
         flash("Not a valid password")
         return redirect("/login")
 
-    session["logged_in"] = user.email
+    session["user_id"] = user.user_id
     flash("already logged in")
     return redirect("/")
 
@@ -120,18 +120,25 @@ def movie_details(movie_id):
     """Show details of a movie"""
     movie = Movie.query.get(movie_id)
 
-    user_id = session['user_id']
+    user_id = session.get("user_id")
 
     if user_id:
-        score = Rating.query.filter_by()
+        score = Rating.query.filter_by(movie_id=movie_id, user_id=user_id).first()
+
+    else:
+        score = None
+
+    return render_template("movie_details.html", movie=movie, score=score)
 
 
+# @app.route("/movies_processing")
+# def movie_processing(movie_id):
 
+    # """ Another route to add or modify movie ratings"""
+    # movie = Movie.query.get(movie_id)
 
+    # if user_id not in session:
 
-
-
-    return render_template("movie_details.html", movie=movie)
 
 
 

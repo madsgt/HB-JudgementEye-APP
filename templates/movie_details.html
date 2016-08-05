@@ -3,7 +3,7 @@
 
 
 <h2>Movie Details</h2>
-<h3>{{ movie.title }}, {{ movie.movie_id }})</h3>
+<h3>{{ movie.title }}, {{ movie.movie_id }}</h3>
 <br>
 
 
@@ -14,22 +14,48 @@
         <br>
     </a>
 
+
+
+
+
+      {% if session.get("user_id") %}
+
+      <h4> User to Rate </h4>
+
+      <form action="/movies_processing" method="POST"> {{ movie.title }}
+      <br>  
+    
+      <br>
+      What new rating do want to give to the movie? :<br>
+      Note- Leave the row above blank in case you do not want to revise the rating
+      <input type="number" name="new_rating">
+      <br>
+        The movie {{ movie.title }} was rated {{ score }} 
+      <br>  
+
+      <input type="submit", value = "RATE">
+
+    </form>
+{% endif %}
+
+
      {% if movie.ratings %}
 
     <h4>Movie Rating</h4>
 
-     {% for ratings in movie.ratings %}
+      
+     {% for rating in movie.ratings %}
 
 
-      <li><a href="/users/{{ratings.user_id}}">The movie was scored {{ratings.score}} by the user {{ratings.user_id}} 
+      <li><a href="/users/{{rating.user_id}}">The movie was rated {{rating.score}} by the user {{rating.user_id}} 
         </a> 
       </li>
 
 
-       
 
     {% endfor %}
-{% endif %}
+    {% endif %}
+
 
 {% endblock %}
       
